@@ -1,4 +1,5 @@
 # Security Research: Supply Chain Logic Audit
+# Project: dotnet/aspnetcore - Indirect Prompt Injection Validation
 # Author: HackerMD (Mohamadisha Shaikh)
 
 name: "Security-Audit-Logic-Bypass"
