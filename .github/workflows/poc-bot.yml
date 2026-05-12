@@ -1,0 +1,16 @@
+name: "PoC: AI Bot Injection"
+on:
+  workflow_dispatch: # Hum ise manually trigger karenge testing ke liye
+
+jobs:
+  simulate-triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Simulate Malicious NuGet Response
+        id: get-version
+        run: |
+          # Yeh wo payload hai jo bot ko "trick" karega
+          # Hum simulate kar rahe hain ki NuGet se ye version aaya:
+          MALICIOUS_VERSION='1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
