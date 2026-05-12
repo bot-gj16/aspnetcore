@@ -13,6 +13,4 @@ jobs:
       - name: "Inject Malicious Metadata"
         id: metadata
         run: |
-          # Creating the payload file
-          cat << 'EOF' > payload.txt
-          1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
+          echo 'payload=1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
